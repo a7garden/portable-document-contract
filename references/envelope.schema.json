@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:oxi:document:envelope:1",
-  "title": "OXI Document 1 parsed envelope",
+  "$id": "urn:pdc:document:envelope:1",
+  "title": "Portable Document Contract 1 parsed envelope",
   "description": "Validates the data model after the constrained envelope grammar has been parsed. It does not validate the text grammar or Writer-only UUIDv7 rule.",
   "type": "object",
   "required": ["format", "body", "id", "created", "updated", "title"],
@@ -22,8 +22,8 @@
     }
   ],
   "properties": {
-    "format": { "const": "oxi-document/1" },
-    "body": { "const": "oxi-djot/1" },
+    "format": { "const": "pdc-document/1" },
+    "body": { "const": "pdc-djot/1" },
     "id": {
       "type": "string",
       "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"

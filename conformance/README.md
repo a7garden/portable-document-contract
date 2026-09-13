@@ -1,4 +1,4 @@
-# OXI Document conformance corpus
+# Portable Document Contract conformance corpus
 
 `corpus.json` is the machine-readable index. Paths are relative to this directory.
 

@@ -1,20 +1,20 @@
-# OXI Document Standard
+# Portable Document Contract
 
-OXI Document is a portable document contract for apps that need to read, edit, index, link, and preserve the same user-authored notes without silently losing data. The canonical body syntax is a frozen Djot profile rather than an unspecified Markdown dialect.
+Portable Document Contract (PDC) is a neutral interoperability contract for apps that need to read, edit, index, link, and preserve the same user-authored notes without silently losing data. The canonical body syntax is a frozen Djot profile rather than an unspecified Markdown dialect.
 
 This repository is both the canonical specification and an implicitly invokable Codex skill. Install it once and Codex can apply the contract automatically when a task concerns a durable user-document format.
 
-> Status: `v1.0.0-draft.2`. The identifiers `oxi-document/1` and `oxi-djot/1` are already treated as compatibility boundaries; breaking changes require a new major identifier.
+> Status: `v1.0.0-draft.3`. The identifiers `pdc-document/1` and `pdc-djot/1` are compatibility boundaries; breaking changes require a new major identifier. Earlier draft tags used the provisional OXI name and were superseded before application adoption.
 
 ## Contents
 
-- Normative contract: [`references/OXI-DOCUMENT-1.0.md`](references/OXI-DOCUMENT-1.0.md)
+- Normative contract: [`references/PDC-1.0.md`](references/PDC-1.0.md)
 - Adoption and migration guide: [`references/adoption.md`](references/adoption.md)
 - Parsed-envelope schema: [`references/envelope.schema.json`](references/envelope.schema.json)
 - Shared render policy: [`references/render-policy.json`](references/render-policy.json)
 - Cross-language fixtures: [`conformance/`](conformance/)
 
-The contract governs durable user-authored documents, not repository documentation or every Markdown file in an app. Its compatibility target is reliable discovery, parsing, identity, core semantics, safe rendering, and lossless preservation across OXI apps.
+The contract governs durable user-authored documents, not repository documentation or every Markdown file in an app. Its compatibility target is reliable discovery, parsing, identity, core semantics, safe rendering, and lossless preservation across independently branded apps.
 
 ## Install as a Codex skill
 
@@ -23,7 +23,7 @@ The contract governs durable user-authored documents, not repository documentati
 The simplest cross-platform method is to give Codex this request:
 
 ```text
-Install the oxi-document-standard skill from https://github.com/project-oxi/oxi-document-standard.
+Install the portable-document-contract skill from https://github.com/a7garden/portable-document-contract.
 ```
 
 Codex can use its bundled skill installer to place the repository in the personal skills directory. The skill becomes available on the next turn; restart the client if an older Codex build does not refresh the skill list.
@@ -34,58 +34,58 @@ macOS or Linux:
 
 ```sh
 python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
-  --repo project-oxi/oxi-document-standard \
+  --repo a7garden/portable-document-contract \
   --path . \
-  --name oxi-document-standard \
-  --ref v1.0.0-draft.2
+  --name portable-document-contract \
+  --ref v1.0.0-draft.3
 ```
 
 PowerShell:
 
 ```powershell
-python "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" --repo project-oxi/oxi-document-standard --path . --name oxi-document-standard --ref v1.0.0-draft.2
+python "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" --repo a7garden/portable-document-contract --path . --name portable-document-contract --ref v1.0.0-draft.3
 ```
 
-The explicit `--name` is required because the skill lives at the repository root. Omit `--ref v1.0.0-draft.2` to follow the latest `main` revision instead of pinning the current draft.
+The explicit `--name` is required because the skill lives at the repository root. Omit `--ref v1.0.0-draft.3` to follow the latest `main` revision instead of pinning the current draft.
 
 ### Direct Git installation
 
 If the bundled installer is unavailable, clone the repository into the personal Codex skills directory:
 
 ```sh
-git clone --depth 1 --branch v1.0.0-draft.2 \
-  https://github.com/project-oxi/oxi-document-standard.git \
-  "${CODEX_HOME:-$HOME/.codex}/skills/oxi-document-standard"
+git clone --depth 1 --branch v1.0.0-draft.3 \
+  https://github.com/a7garden/portable-document-contract.git \
+  "${CODEX_HOME:-$HOME/.codex}/skills/portable-document-contract"
 ```
 
-Do not nest the repository one directory deeper: `SKILL.md` must be directly inside the `oxi-document-standard` directory.
+Do not nest the repository one directory deeper: `SKILL.md` must be directly inside the `portable-document-contract` directory.
 
-The command above pins the draft tag. Remove `--branch v1.0.0-draft.2` if you intentionally want a Git-managed installation that follows `main` and can be updated with `git pull`.
+The command above pins the draft tag. Remove `--branch v1.0.0-draft.3` if you intentionally want a Git-managed installation that follows `main` and can be updated with `git pull`.
 
 ## Use
 
 Codex may load the skill implicitly when a task changes an app's durable user-document storage, editor, renderer, discovery, links, assets, or migration behavior. Invoke it explicitly when you want to force a standards pass:
 
 ```text
-$oxi-document-standard audit this note editor for cross-app compatibility.
+$portable-document-contract audit this note editor for cross-app compatibility.
 ```
 
 For stronger project-wide routing, add this line to the applicable global or repository `AGENTS.md`:
 
 ```markdown
-For durable user-authored documents, use the `oxi-document-standard` skill before changing storage, parsing, editing, rendering, linking, assets, or migrations. Repository documentation is out of scope.
+For durable user-authored documents, use the `portable-document-contract` skill before changing storage, parsing, editing, rendering, linking, assets, or migrations. Repository documentation is out of scope.
 ```
 
 User instructions and repository-specific architecture remain authoritative. Installing this skill does not authorize bulk conversion, deletion, publication, or modification of user documents.
 
 ## Update or remove
 
-The bundled installer intentionally refuses to overwrite an existing skill directory. To update an installer-managed copy, move the current `oxi-document-standard` directory to a backup location, run the install command again, verify the new copy, and then remove the backup when satisfied.
+The bundled installer intentionally refuses to overwrite an existing skill directory. To update an installer-managed copy, move the current `portable-document-contract` directory to a backup location, run the install command again, verify the new copy, and then remove the backup when satisfied.
 
 For a Git-managed installation that follows `main`:
 
 ```sh
-git -C "${CODEX_HOME:-$HOME/.codex}/skills/oxi-document-standard" pull --ff-only
+git -C "${CODEX_HOME:-$HOME/.codex}/skills/portable-document-contract" pull --ff-only
 ```
 
 To disable the skill without deleting it, move its directory outside the personal `skills` directory. Start a new Codex turn after updating, replacing, or disabling a skill.

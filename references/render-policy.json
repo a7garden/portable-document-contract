@@ -1,7 +1,7 @@
 {
-  "format": "oxi-document-render-policy/1",
-  "allowedSchemes": ["http", "https", "mailto", "oxi"],
-  "internallyResolvedSchemes": ["oxi"],
+  "format": "pdc-document-render-policy/1",
+  "allowedSchemes": ["http", "https", "mailto", "pdc"],
+  "internallyResolvedSchemes": ["pdc"],
   "blockedSchemes": ["data", "file", "javascript", "vbscript"],
   "allowedElements": [
     "a", "blockquote", "br", "caption", "code", "del", "div", "em",
@@ -10,7 +10,7 @@
     "tbody", "td", "tfoot", "th", "thead", "tr", "ul", "section"
   ],
   "allowedAttributes": {
-    "*": ["aria-*", "class", "id", "lang", "role", "title", "data-oxi-*"],
+    "*": ["aria-*", "class", "id", "lang", "role", "title", "data-pdc-*"],
     "a": ["href"],
     "img": ["alt", "height", "src", "width"],
     "ol": ["start", "type"],

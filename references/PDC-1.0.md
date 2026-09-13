@@ -1,18 +1,18 @@
-# OXI Document 1
+# Portable Document Contract 1
 
-Status: owner standard, draft 2
+Status: public draft 3
 
 Date: 2026-09-13
 
-Document identifier: `oxi-document/1`
+Document identifier: `pdc-document/1`
 
-Body identifier: `oxi-djot/1`
+Body identifier: `pdc-djot/1`
 
 This document is normative. The key words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, and **MAY** describe conformance requirements.
 
 ## 1. Scope and compatibility promise
 
-OXI Document 1 governs durable, user-authored notes and documents that owner-created applications may open, index, edit, link, embed, or migrate.
+Portable Document Contract 1 governs durable, user-authored notes and documents that participating applications may open, index, edit, link, embed, or migrate.
 
 It does not govern repository documentation, source-code comments, prompts, logs, caches, generated previews, exported reports, immutable event ledgers, or database-internal records unless they are explicitly promoted to the shared document plane.
 
@@ -28,14 +28,14 @@ Compatibility does not require identical CSS, pixel-identical previews, identica
 
 ## 2. Versioning
 
-- `oxi-document/1` identifies the envelope, storage, identity, and semantic contract in this document.
-- `oxi-djot/1` identifies the frozen body dialect.
+- `pdc-document/1` identifies the envelope, storage, identity, and semantic contract in this document.
+- `pdc-djot/1` identifies the frozen body dialect.
 - Compatible clarifications and new optional fields may be added without changing the major identifier.
 - A change that makes a previously conforming document parse differently, changes required semantics, removes a field, or permits destructive down-conversion MUST use a new major identifier.
 - Readers MUST compare identifiers as exact, case-sensitive strings. An unknown major version is unsupported, not malformed.
 - Implementations MUST be tested against a named conformance-corpus revision. Depending only on a parser package version is insufficient.
 
-The upstream Djot syntax baseline is commit [`d77f8a0cbea6785c42b3e2b03463195b5ca6f7c7`](https://github.com/jgm/djot/tree/d77f8a0cbea6785c42b3e2b03463195b5ca6f7c7). Upstream changes do not alter `oxi-djot/1` until incorporated here with fixtures.
+The upstream Djot syntax baseline is commit [`d77f8a0cbea6785c42b3e2b03463195b5ca6f7c7`](https://github.com/jgm/djot/tree/d77f8a0cbea6785c42b3e2b03463195b5ca6f7c7). Upstream changes do not alter `pdc-djot/1` until incorporated here with fixtures.
 
 ## 3. Vault and discovery
 
@@ -43,11 +43,11 @@ A vault is a user-selected directory. A document path never defines document ide
 
 ### 3.1 Vault manifest
 
-A writable vault MUST contain `.oxi/vault.json`:
+A writable vault MUST contain `.pdc/vault.json`:
 
 ```json
 {
-  "format": "oxi-vault/1",
+  "format": "pdc-vault/1",
   "id": "018f47c6-1199-72b3-87de-344e5a493e27",
   "created": "2026-09-13T12:34:56.789Z"
 }
@@ -63,29 +63,29 @@ A writable vault MUST contain `.oxi/vault.json`:
 
 - Canonical documents use the lowercase `.djot` extension. `.dj`, `.md`, `.markdown`, and `.html` are not canonical aliases.
 - Readers MUST recursively discover regular `.djot` files below the vault root.
-- Readers MUST NOT scan `.oxi`, `.git`, or any path with a dot-prefixed component.
+- Readers MUST NOT scan `.pdc`, `.git`, or any path with a dot-prefixed component.
 - Readers MUST NOT follow symbolic links during recursive discovery.
 - File ordering MUST NOT affect identity or conflict resolution.
 - Every discovered `.djot` file MUST appear as a document or as a visible diagnostic. Silent skipping is nonconforming.
 - Duplicate document IDs are vault errors. An app MUST show every conflicting path and MUST NOT choose a winner silently.
 
-Legacy formats may be discovered by separate adapters. They MUST NOT be classified as canonical OXI documents merely because their body resembles Djot.
+Legacy formats may be discovered by separate adapters. They MUST NOT be classified as canonical PDC documents merely because their body resembles Djot.
 
 ## 4. File transport
 
 - A canonical document is UTF-8 without a byte-order mark. A Reader MUST reject a byte-order mark as `invalid_transport`; it MUST NOT strip one silently.
 - A canonical document is at most 4 MiB, including envelope and body.
 - A canonical body has at most 256 simultaneously open block containers. Implementations MAY impose lower presentation limits only if they still preserve the source and show a visible limitation; they MUST NOT claim Reader conformance for a document they cannot parse to this limit.
-- The internal media type is `application/vnd.oxi.document+djot;version=1`. It is an ecosystem identifier, not a claim of IANA registration.
+- The internal media type is `application/vnd.pdc.document+djot;version=1`. It is a contract identifier, not a claim of IANA registration.
 - Writers create LF line endings. Readers MUST accept LF or CRLF and interpret them equivalently.
 - Writers MUST NOT normalize an untouched document merely because it was opened.
 - The first line is exactly `---`. The next exact `---` line closes the envelope. The remainder is the Djot body and may be empty.
 - A missing, empty, duplicated, or unclosed envelope is malformed.
-- Frontmatter-free `.djot` is valid upstream Djot but is an invalid OXI transport. A Reader reports `invalid_transport` and MAY offer an explicit foreign-Djot import; it never presents the file as a conforming document silently.
+- Frontmatter-free `.djot` is valid upstream Djot but is an invalid PDC transport. A Reader reports `invalid_transport` and MAY offer an explicit foreign-Djot import; it never presents the file as a conforming document silently.
 
 ## 5. Envelope grammar
 
-The envelope uses the frozen OXI constrained-YAML grammar, not general YAML.
+The envelope uses the frozen PDC constrained-YAML grammar, not general YAML.
 
 - Keys are nonempty, case-sensitive strings at indentation level zero.
 - A value is a Boolean, single-line string, flat string sequence, literal block string, or one nested map.
@@ -102,8 +102,8 @@ General-purpose YAML libraries MAY be used only behind validation that rejects e
 
 | Field | Type | Requirement |
 |---|---|---|
-| `format` | string | Exact value `oxi-document/1` |
-| `body` | string | Exact value `oxi-djot/1` |
+| `format` | string | Exact value `pdc-document/1` |
+| `body` | string | Exact value `pdc-djot/1` |
 | `id` | string | Canonical lowercase UUID |
 | `created` | string | Canonical UTC timestamp |
 | `updated` | string | Canonical UTC timestamp, not earlier than `created` |
@@ -129,9 +129,9 @@ Writers MUST preserve Unicode text. They MUST NOT silently case-fold or normaliz
 
 ### 5.3 Extensions and unknown fields
 
-- Unprefixed field names are reserved for future OXI Document versions.
+- Unprefixed field names are reserved for future PDC versions.
 - An application-specific extension MUST be a top-level map named `x_<namespace>`, where the namespace is lowercase ASCII letters and digits beginning with a letter.
-- Owner-reserved namespaces are `x_oximemo`, `x_sawhorse`, `x_oxibrain`, `x_farm`, and `x_lexi`. Their corresponding app is the only Writer allowed to create or reinterpret values in that map.
+- The initially registered application namespaces are `x_oximemo`, `x_sawhorse`, `x_oxibrain`, `x_farm`, and `x_lexi`. Their corresponding app is the only Writer allowed to create or reinterpret values in that map.
 - A new app claims a namespace by adding it to this registry before shipping writes. Renaming or transferring a claimed namespace is a standard change with a migration plan.
 - A Writer MUST NOT create another application's namespace.
 - Readers and Mutators MUST preserve unknown unprefixed fields and unknown extension maps.
@@ -145,17 +145,17 @@ New documents and full canonical rewrites emit known keys in this order:
 
 Unknown unprefixed fields retain observed order. Extension maps follow, sorted by namespace. Reordering alone MUST NOT trigger a rewrite of an existing file.
 
-## 6. Body dialect: `oxi-djot/1`
+## 6. Body dialect: `pdc-djot/1`
 
 The body uses the pinned Djot syntax with these constraints:
 
 - Raw inline and raw block nodes in any output format are nonconforming. In particular, embedded raw HTML is forbidden.
-- The only attributes with standard semantics are `id`, `class`, `lang`, `title`, and `data-oxi-*`. Unknown attributes MUST survive source-preserving edits but MUST NOT be copied blindly into rendered HTML.
-- Class names beginning `oxi-` and attributes beginning `data-oxi-` are reserved by this standard.
+- The only attributes with standard semantics are `id`, `class`, `lang`, `title`, and `data-pdc-*`. Unknown attributes MUST survive source-preserving edits but MUST NOT be copied blindly into rendered HTML.
+- Class names beginning `pdc-` and attributes beginning `data-pdc-` are reserved by this standard.
 - App-specific classes use `x-<namespace>-<name>`. App-specific attributes use `data-x-<namespace>-<name>`.
 - A body parser MUST retain source ranges or another lossless representation sufficient for the write guarantees in section 10.
 - Writers creating or fully regenerating a body use LF, place a blank line between block elements, omit trailing spaces, and end a nonempty body with one LF. Existing authored layout is preserved unless a deliberate format action is requested.
-- An implementation that accepts syntax beyond this dialect does so only as an importer. It MUST NOT write the extra syntax while labeling the body `oxi-djot/1`.
+- An implementation that accepts syntax beyond this dialect does so only as an importer. It MUST NOT write the extra syntax while labeling the body `pdc-djot/1`.
 
 Standard Djot structures—headings, paragraphs, emphasis, strong text, links, images, autolinks, verbatim text, highlight, superscript, subscript, insert/delete, math, footnotes, lists, task items, code blocks, divs, and pipe tables—must remain parseable and preservable. A viewer MAY use a readable textual fallback for math or another presentation feature it cannot render.
 
@@ -191,20 +191,20 @@ Example:
 Canonical internal links use:
 
 ```text
-[Readable label](oxi://document/<document-uuid>)
-[Readable label](oxi://document/<document-uuid>#b-<block-uuid>)
+[Readable label](pdc://document/<document-uuid>)
+[Readable label](pdc://document/<document-uuid>#b-<block-uuid>)
 ```
 
 - Resolution is by UUID within the current vault.
-- `oxi:` is a private ecosystem URI scheme, not an IANA registration and not an operating-system protocol-handler requirement.
+- `pdc:` is a private contract URI scheme, not an IANA registration and not an operating-system protocol-handler requirement.
 - The label is fallback content and MUST remain readable when unresolved.
 - An unresolved target is a visible broken-link state, not a reason to rewrite the URL.
 - `[[wiki links]]`, app-specific custom schemes, and path-only note links are legacy or extension syntax, not canonical internal links.
 
-A document embed is the same link with class `oxi-embed`:
+A document embed is the same link with class `pdc-embed`:
 
 ```text
-[Embedded note](oxi://document/018f47c6-4a77-7c52-9db8-0e5f9bcb17db){.oxi-embed}
+[Embedded note](pdc://document/018f47c6-4a77-7c52-9db8-0e5f9bcb17db){.pdc-embed}
 ```
 
 A viewer that does not support inline embedding MUST render the ordinary link fallback.
@@ -212,11 +212,11 @@ A viewer that does not support inline embedding MUST render the ordinary link fa
 ### 8.2 Managed assets
 
 - Managed asset bytes are addressed by lowercase SHA-256 digest.
-- The canonical URI is `oxi://asset/sha256/<64-hex-digest>`.
-- The canonical vault path is `.oxi/assets/sha256/<first-two-hex>/<64-hex-digest>`.
+- The canonical URI is `pdc://asset/sha256/<64-hex-digest>`.
+- The canonical vault path is `.pdc/assets/sha256/<first-two-hex>/<64-hex-digest>`.
 - A managed asset is at most 64 MiB. Larger resources remain external or require a future extension with explicit streaming semantics.
 - Stored bytes MUST hash to the URI digest. A mismatch is a visible integrity error.
-- Original filename and media type MAY be carried as `data-oxi-filename` and `data-oxi-media-type` attributes. They are hints, not identity.
+- Original filename and media type MAY be carried as `data-pdc-filename` and `data-pdc-media-type` attributes. They are hints, not identity.
 - Writers MUST use an atomic create-if-absent operation and MUST NOT overwrite different bytes at an existing digest path.
 - Apps MUST NOT garbage-collect unreferenced assets automatically. Garbage collection requires an explicit maintenance action, a complete reference scan, and a recoverable quarantine period.
 - HTTP(S) resources are external links and may be rendered subject to policy. Relative file URLs, absolute filesystem paths, `file:`, `data:`, and app-specific asset schemes are not canonical managed assets.
@@ -224,7 +224,7 @@ A viewer that does not support inline embedding MUST render the ordinary link fa
 Example:
 
 ```text
-![Diagram](oxi://asset/sha256/0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef){data-oxi-filename="diagram.png" data-oxi-media-type="image/png"}
+![Diagram](pdc://asset/sha256/0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef){data-pdc-filename="diagram.png" data-pdc-media-type="image/png"}
 ```
 
 ## 9. Standard semantic constructs
@@ -240,20 +240,20 @@ Djot task items are canonical:
 
 `[ ]` means open and `[x]` or `[X]` means completed. A Mutator that exposes task toggling MUST change only the task marker and required metadata timestamps.
 
-A task that needs stable identity wraps its complete leading label in an `oxi-task` span whose ID follows the block-ID grammar:
+A task that needs stable identity wraps its complete leading label in a `pdc-task` span whose ID follows the block-ID grammar:
 
 ```text
-- [ ] [Open task]{#b-018f47c6-c718-728c-9d91-b2bc700814bb .oxi-task}
+- [ ] [Open task]{#b-018f47c6-c718-728c-9d91-b2bc700814bb .pdc-task}
 ```
 
 Apps recognize the ID only when the span is the task item's first inline child. A plain task item remains valid but cannot be a stable link target. Once present, the task ID follows the stability and duplicate rules in section 7.2.
 
 ### 9.2 Query blocks
 
-An executable query is a fenced code block whose language is `oxi-query`:
+An executable query is a fenced code block whose language is `pdc-query`:
 
 ````text
-``` oxi-query
+``` pdc-query
 tag = "project"
 ```
 ````
@@ -295,7 +295,7 @@ Documents and renderer output are untrusted input.
 - Previewers MUST sanitize generated HTML or construct a safe native view tree.
 - Raw HTML is forbidden even though upstream Djot can represent it.
 - `javascript:`, `data:`, `file:`, and unknown schemes MUST NOT be navigated or loaded automatically.
-- `oxi:` URIs MUST be handled by an internal resolver, never handed directly to a browser or operating system.
+- `pdc:` URIs MUST be handled by an internal resolver, never handed directly to a browser or operating system.
 - Event-handler attributes, scripts, stylesheets, iframes, plugins, and executable embeds MUST be removed or inert.
 - External HTTP(S) resources SHOULD require the app's normal privacy/network policy and MUST NOT be fetched merely for indexing.
 - Attribute keys and values MUST be allowlisted when converted to HTML. Source preservation and render exposure are separate decisions.
@@ -365,8 +365,8 @@ No single app implementation silently defines the standard. When the specificati
 
 ```text
 ---
-format: oxi-document/1
-body: oxi-djot/1
+format: pdc-document/1
+body: pdc-djot/1
 id: 018f47c6-4a77-7c52-9db8-0e5f9bcb17db
 created: 2026-09-13T12:34:56.789Z
 updated: 2026-09-13T12:34:56.789Z
