@@ -1,6 +1,6 @@
 # OXI Document 1
 
-Status: owner standard, draft 1
+Status: owner standard, draft 2
 
 Date: 2026-09-13
 
