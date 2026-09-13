@@ -1,0 +1,29 @@
+{
+  "format": "oxi-document-render-policy/1",
+  "allowedSchemes": ["http", "https", "mailto", "oxi"],
+  "internallyResolvedSchemes": ["oxi"],
+  "blockedSchemes": ["data", "file", "javascript", "vbscript"],
+  "allowedElements": [
+    "a", "blockquote", "br", "caption", "code", "del", "div", "em",
+    "figcaption", "figure", "h1", "h2", "h3", "h4", "h5", "h6", "hr", "img", "ins", "li",
+    "mark", "ol", "p", "pre", "span", "strong", "sub", "sup", "table",
+    "tbody", "td", "tfoot", "th", "thead", "tr", "ul", "section"
+  ],
+  "allowedAttributes": {
+    "*": ["aria-*", "class", "id", "lang", "role", "title", "data-oxi-*"],
+    "a": ["href"],
+    "img": ["alt", "height", "src", "width"],
+    "ol": ["start", "type"],
+    "td": ["colspan", "rowspan"],
+    "th": ["colspan", "rowspan", "scope"]
+  },
+  "blockedAttributes": ["style", "srcdoc", "on*"],
+  "blockedElements": [
+    "applet", "audio", "base", "button", "embed", "form", "iframe", "input",
+    "link", "meta", "object", "script", "select", "source", "style", "textarea",
+    "track", "video"
+  ],
+  "unknownElementAction": "unwrap-preserving-children",
+  "blockedElementAction": "remove-entire-subtree",
+  "externalResourcesDuringIndexing": false
+}
