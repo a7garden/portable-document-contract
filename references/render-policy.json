@@ -1,29 +1,59 @@
 {
-  "format": "pdc-document-render-policy/1",
-  "allowedSchemes": ["http", "https", "mailto", "pdc"],
-  "internallyResolvedSchemes": ["pdc"],
-  "blockedSchemes": ["data", "file", "javascript", "vbscript"],
-  "allowedElements": [
-    "a", "blockquote", "br", "caption", "code", "del", "div", "em",
-    "figcaption", "figure", "h1", "h2", "h3", "h4", "h5", "h6", "hr", "img", "ins", "li",
-    "mark", "ol", "p", "pre", "span", "strong", "sub", "sup", "table",
-    "tbody", "td", "tfoot", "th", "thead", "tr", "ul", "section"
-  ],
-  "allowedAttributes": {
-    "*": ["aria-*", "class", "id", "lang", "role", "title", "data-pdc-*"],
-    "a": ["href"],
-    "img": ["alt", "height", "src", "width"],
-    "ol": ["start", "type"],
-    "td": ["colspan", "rowspan"],
-    "th": ["colspan", "rowspan", "scope"]
+  "format": "pdc-document-render-policy/2",
+  "common": {
+    "allowedSchemes": ["http", "https", "mailto", "pdc"],
+    "internallyResolvedSchemes": ["pdc"],
+    "blockedSchemes": ["data", "file", "javascript", "vbscript"],
+    "externalResourcesDuringIndexing": false,
+    "externalSubresources": "policy-gated"
   },
-  "blockedAttributes": ["style", "srcdoc", "on*"],
-  "blockedElements": [
-    "applet", "audio", "base", "button", "embed", "form", "iframe", "input",
-    "link", "meta", "object", "script", "select", "source", "style", "textarea",
-    "track", "video"
-  ],
-  "unknownElementAction": "unwrap-preserving-children",
-  "blockedElementAction": "remove-entire-subtree",
-  "externalResourcesDuringIndexing": false
+  "profiles": {
+    "pdc-djot/1": {
+      "renderMode": "sanitize-generated-html",
+      "allowedElements": [
+        "a", "blockquote", "br", "caption", "code", "del", "div", "em",
+        "figcaption", "figure", "h1", "h2", "h3", "h4", "h5", "h6",
+        "hr", "img", "ins", "li", "mark", "ol", "p", "pre", "section",
+        "span", "strong", "sub", "sup", "table", "tbody", "td", "tfoot",
+        "th", "thead", "tr", "ul"
+      ],
+      "allowedAttributes": {
+        "*": ["aria-*", "class", "id", "lang", "role", "title", "data-pdc-*", "data-x-*-*"],
+        "a": ["href"],
+        "img": ["alt", "height", "src", "width"],
+        "ol": ["start", "type"],
+        "td": ["colspan", "rowspan"],
+        "th": ["colspan", "rowspan", "scope"]
+      },
+      "blockedAttributes": ["style", "srcdoc", "on*"],
+      "blockedElements": [
+        "applet", "audio", "base", "button", "embed", "form", "iframe",
+        "input", "link", "meta", "object", "script", "select", "source",
+        "style", "textarea", "track", "video"
+      ],
+      "unknownElementAction": "unwrap-preserving-children",
+      "blockedElementAction": "remove-entire-subtree"
+    },
+    "pdc-html/1": {
+      "renderMode": "sanitize-source-into-isolated-view",
+      "preserveSource": true,
+      "allowInlineStyleInIsolation": true,
+      "blockedElements": [
+        "applet", "base", "embed", "form", "iframe", "object", "script"
+      ],
+      "blockedAttributes": ["formaction", "srcdoc", "on*"],
+      "metaRefresh": "blocked",
+      "nestedBrowsingContexts": "blocked",
+      "forms": "inert",
+      "popups": "blocked",
+      "topNavigation": "blocked",
+      "scripts": "blocked",
+      "cssImports": "policy-gated",
+      "cssExternalUrls": "policy-gated",
+      "externalStylesheets": "policy-gated",
+      "externalFonts": "policy-gated",
+      "unknownElementAction": "preserve-source-unwrap-render",
+      "sanitizedRenderMustNotMutateSource": true
+    }
+  }
 }

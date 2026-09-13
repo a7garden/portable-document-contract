@@ -1,69 +1,101 @@
 # Adopting Portable Document Contract 1
 
-Read the normative specification first. This guide explains how to apply it without broadening its scope.
+Read the normative specification first. This guide explains how to apply the two canonical body profiles without broadening the shared document plane.
 
 ## Decide whether the standard applies
 
-It applies when an app persists durable text that a person understands as a note or document and another owner-created app may open, index, edit, link, embed, or migrate.
+PDC applies when an app persists durable text that a person understands as a note or document and another participating app may open, index, edit, link, embed, or migrate.
 
 It does not automatically apply to:
 
 - `README.md`, `AGENTS.md`, design docs, changelogs, and source-controlled prose;
 - prompts, logs, telemetry, queues, immutable event ledgers, database-only records, and caches;
-- generated previews, reports, HTML renderings, and temporary editor state;
-- Markdown or HTML accepted only as an import or emitted only as an export.
+- generated previews, reports, and temporary editor state;
+- Markdown, HTML, or Djot accepted only as import or emitted only as export.
 
-If a document-like record must remain in a database for product reasons, expose a `pdc-document/1` import/export adapter only when cross-app document interchange is actually required. Do not force the database's internal schema to mimic a file.
+If a document-like record must remain in a database for product reasons, expose a PDC adapter only when cross-app interchange is required. Do not force the internal database schema to mimic files.
+
+## Choose a body profile
+
+- Use `pdc-djot/1` and `.djot` for ordinary notes, knowledge documents, task-bearing prose, and content whose structure should remain portable across non-browser renderers.
+- Use `pdc-html/1` and `.html` when authored HTML structure, layout, or inline CSS is part of the source's value. HTML is not a generated preview and is not second-class.
+- Do not invent app-specific canonical Markdown, HTML, JSON, or rich-text dialects. Extend PDC through registered namespaces and readable fallbacks.
+- Conversion between Djot and HTML is an explicit migration/export, never an automatic save behavior.
+
+A full PDC Reader supports both profiles. A Writer declares which profile or profiles it creates. A Mutator may edit one profile and keep the other read-only while preserving and safely presenting it.
 
 ## New applications
 
-1. Choose the conformance role: Reader, Writer, or Mutator.
-2. Discover lowercase `.djot` files according to the vault rules and surface every invalid or unsupported document as a visible diagnostic.
-3. Parse the envelope with the frozen constrained grammar, then parse the body as `pdc-djot/1` rather than "whatever Markdown this library accepts."
-4. Resolve document links by UUID and managed assets by digest. Never make a path, title, or app-local database ID the canonical identity.
-5. Use a Djot-aware source editor or plain-text editor. A Markdown-only editor may be used only for legacy imports, not as the canonical writer.
-6. Render through a sanitizer. Raw renderer output is untrusted even when the Djot implementation produced it.
-7. Preserve unknown extension metadata and unsupported source constructs. If the editor cannot do so, downgrade that document to read-only.
-8. Run the shared conformance fixtures in the app's native stack. Add round-trip, external-change, duplicate-ID, invalid-file visibility, and sanitizer tests.
+1. Choose Full Reader, Writer, and profile-specific Mutator capabilities.
+2. Discover lowercase `.djot` and `.html` files according to the vault rules. Classify unmarked HTML visibly as legacy.
+3. Parse the shared constrained envelope, then dispatch to exactly the declared `body` profile.
+4. Resolve document links by UUID and managed assets by digest. Never use paths, titles, or app-local database IDs as canonical identity.
+5. Use a Djot-aware or plain source editor for Djot. Use a source-preserving HTML editor for HTML. A structural editor must retain unsupported source constructs or downgrade to read-only.
+6. Sanitize every preview. HTML uses an isolated view with scripts, event handlers, forms, popups, navigation, and unapproved subresources disabled; sanitization never rewrites stored source.
+7. Preserve unknown extension metadata and unsupported constructs. If lossless preservation is impossible, require an explicit conversion to a new target.
+8. Run the shared fixtures for both body profiles in the app's native stack.
 
 ## Existing applications
 
 Use this order:
 
-1. Inventory current transports, metadata, links, assets, semantic extensions, discovery rules, and editor round-trip behavior.
-2. Add a PDC Reader without changing existing files.
-3. Make invalid or unsupported `.djot` files visible instead of silently skipping them.
-4. Write `pdc-document/1` for newly created documents while retaining legacy readers.
-5. Add explicit importers from each legacy format. Preserve legacy IDs in the owning app's extension map when a UUID must be allocated.
-6. Recalculate format-derived indexes such as task, tag, heading, and body hashes from the converted Djot body; never carry Markdown-derived projections forward as if they were still valid.
+1. Inventory transports, metadata, links, assets, semantic extensions, discovery rules, security policy, and editor round-trip behavior.
+2. Add a Full Reader for PDC Djot and HTML without changing existing files.
+3. Make invalid `.djot`, canonical/legacy `.html`, and unsupported versions visible instead of silently skipping them.
+4. Write PDC for newly created documents using the product-appropriate body profile while retaining legacy readers and writers during the compatibility window.
+5. Add explicit importers from each legacy format. Legacy HTML that already meets the safe-authored profile should migrate to PDC HTML without body conversion.
+6. Recalculate format-derived indexes such as tasks, tags, headings, links, and body hashes from the selected canonical body; never carry projections from another dialect forward as authoritative.
 7. Offer per-document or user-authorized batch conversion with backup and a machine-readable loss report.
-8. Retire legacy writing only after the fixture suite and representative real-vault tests pass in every participating app.
+8. Retire a legacy writer only after shared fixtures and representative real-vault tests pass in every participating application.
 
-Never rewrite a vault merely because an app was upgraded. Opening and closing an untouched document must leave its bytes unchanged.
+Never rewrite a vault merely because an app was upgraded. Opening and closing an untouched document leaves every byte unchanged.
 
 ## Editor and preview integration
 
-- CodeMirror, Atomic Editor, or another Markdown-specific editor is not automatically a Djot editor. Disable Markdown-only syntax transforms for canonical documents until they are implemented against the pinned Djot grammar.
-- The safe first implementation is plain source editing plus a separate Djot preview. A richer editor is conforming only when unsupported nodes and attributes survive edits.
-- Preview parity means the same document structure and core semantics, not identical CSS. Each app may style the rendered tree differently.
-- Link clicks, embeds, tasks, query blocks, and asset URLs must go through PDC resolvers; do not hand custom URI schemes directly to a browser engine.
+### Djot
+
+- CodeMirror, Atomic Editor, or another Markdown-specific editor is not automatically a Djot editor. Disable Markdown-only transforms until implemented against the pinned Djot grammar.
+- The safe first implementation is plain source editing plus separate Djot preview.
+
+### HTML
+
+- Preserve the raw body source; DOM serialization is not a harmless round trip.
+- A source-only editor is conforming. A visual editor is conforming only when comments, unknown elements and attributes, whitespace, and ordering survive or the user explicitly accepts a new converted target.
+- Render through sanitization and isolation. Inline CSS may remain useful inside the sandbox, but external CSS, fonts, imports, and CSS URLs require explicit app policy.
+
+### Both profiles
+
+- Preview parity means the same document structure and core semantics, not identical CSS.
+- Link clicks, embeds, tasks, query blocks, and asset URLs go through PDC resolvers; custom URI schemes are never handed directly to a browser engine.
+- Editing starts from a source-byte snapshot or digest and checks it before replacement.
+
+## Existing product roles
+
+- **Oximemo:** Full Reader; Djot and HTML Writer/Mutator. Keep HTML first-class. Migrate current Markdown to Djot selectively and current HTML to PDC HTML without body conversion when safe.
+- **Sawhorse:** Full Reader. Apply PDC only to durable user-authored documents; keep workflow ledgers, runtime state, approvals, caches, and generated evidence outside. Prefer PDC HTML for compatible `shdoc/1` material.
+- **Oxibrain:** Full Reader/indexer through connectors only. Never write or migrate the user's vault.
+- **Farm:** no current document-plane migration. Re-run the scope gate before introducing a durable shared user document.
+- **Lexi:** keep SQLite as product storage. Add PDC import/export only when dictionary entries are deliberately promoted for cross-app interchange.
 
 ## Repository integration
 
-For an in-scope app, add a short repository-local note only if it adds useful context beyond the global instruction. Prefer wording like:
+Each participating repository keeps a migration or adoption document that states its role, in-scope data, mappings, stages, safety gates, and completion criteria. Its root `AGENTS.md` marks that plan as the highest-priority document-plane initiative unless the user explicitly overrides it.
 
-> User-authored durable documents in this repository follow Portable Document Contract 1. Use the `portable-document-contract` skill before changing their storage, editor, renderer, discovery, linking, asset, or migration behavior. Repository documentation is out of scope.
+Use wording equivalent to:
 
-Pin tests to the fixture corpus revision used by the app. When the standard changes, update the parser, writer, migrations, and fixture revision in one coherent change.
+> Portable Document Contract adoption is the repository's highest-priority document-plane initiative. Before changing durable user-document storage, discovery, parsing, editing, rendering, linking, assets, indexing, or migration, load the `portable-document-contract` skill and follow the repository migration plan. Do not convert or rewrite user files without the plan's explicit gates and user authorization.
+
+Pin tests to the fixture corpus revision used by the app. When the standard changes, update parser, writer, migration, and corpus revision coherently.
 
 ## Review checklist
 
-- Does every participating app find the same valid files in the same vault?
-- Does every invalid or unsupported file produce a visible, actionable diagnostic?
-- Are document identity, links, and assets independent of filenames and app-local databases?
-- Are metadata-only edits body-byte-preserving?
-- Are unknown extensions preserved or the document made read-only?
+- Does every Full Reader find the same valid `.djot` and PDC `.html` files?
+- Is unmarked HTML visible as legacy rather than silently skipped?
+- Does every invalid or unsupported file produce an actionable diagnostic?
+- Are identity, links, and assets independent of filenames and local databases?
+- Are metadata-only edits body-byte-preserving for both profiles?
+- Are HTML previews isolated without mutating source?
+- Are unknown extensions and source constructs preserved or the document made read-only?
 - Are writes atomic and guarded against external changes?
-- Is preview output sanitized and are unsafe schemes blocked?
-- Can legacy import report every lossy transformation before replacing a source?
-- Do Rust, TypeScript, Swift, and any other implementation consume the same fixtures?
+- Can legacy import report every lossy, unsafe, ambiguous, or externalized transformation before replacing a source?
+- Do Rust, TypeScript, Swift, and other implementations consume the same fixture revision?

@@ -1,10 +1,10 @@
 # Portable Document Contract
 
-Portable Document Contract (PDC) is a neutral interoperability contract for apps that need to read, edit, index, link, and preserve the same user-authored notes without silently losing data. The canonical body syntax is a frozen Djot profile rather than an unspecified Markdown dialect.
+Portable Document Contract (PDC) is a neutral interoperability contract for apps that need to read, edit, index, link, and preserve the same user-authored notes without silently losing data. It defines a frozen Djot profile for ordinary notes and a source-preserving HTML profile for documents whose native structure, layout, or inline CSS matters.
 
 This repository is both the canonical specification and an implicitly invokable Codex skill. Install it once and Codex can apply the contract automatically when a task concerns a durable user-document format.
 
-> Status: `v1.0.0-draft.3`. The identifiers `pdc-document/1` and `pdc-djot/1` are compatibility boundaries; breaking changes require a new major identifier. Earlier draft tags used the provisional OXI name and were superseded before application adoption.
+> Status: `v1.0.0-draft.4` working draft. `pdc-document/1` is the shared contract; `pdc-djot/1` and `pdc-html/1` are canonical body-profile boundaries. Earlier draft tags used the provisional OXI name and were superseded before application adoption.
 
 ## Contents
 
@@ -14,7 +14,7 @@ This repository is both the canonical specification and an implicitly invokable 
 - Shared render policy: [`references/render-policy.json`](references/render-policy.json)
 - Cross-language fixtures: [`conformance/`](conformance/)
 
-The contract governs durable user-authored documents, not repository documentation or every Markdown file in an app. Its compatibility target is reliable discovery, parsing, identity, core semantics, safe rendering, and lossless preservation across independently branded apps.
+The contract governs durable user-authored documents, not repository documentation or every Markdown/HTML file in an app. Its compatibility target is reliable discovery, parsing, identity, core semantics, safe rendering, and lossless preservation across independently branded apps. Djot and marked PDC HTML are equally canonical; ordinary unmarked HTML remains visible legacy input.
 
 ## Install as a Codex skill
 
@@ -36,31 +36,30 @@ macOS or Linux:
 python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-installer/scripts/install-skill-from-github.py" \
   --repo a7garden/portable-document-contract \
   --path . \
-  --name portable-document-contract \
-  --ref v1.0.0-draft.3
+  --name portable-document-contract
 ```
 
 PowerShell:
 
 ```powershell
-python "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" --repo a7garden/portable-document-contract --path . --name portable-document-contract --ref v1.0.0-draft.3
+python "$HOME/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py" --repo a7garden/portable-document-contract --path . --name portable-document-contract
 ```
 
-The explicit `--name` is required because the skill lives at the repository root. Omit `--ref v1.0.0-draft.3` to follow the latest `main` revision instead of pinning the current draft.
+The explicit `--name` is required because the skill lives at the repository root. Add `--ref <released-tag-or-commit>` when you intentionally want to pin an audited revision instead of following `main`.
 
 ### Direct Git installation
 
 If the bundled installer is unavailable, clone the repository into the personal Codex skills directory:
 
 ```sh
-git clone --depth 1 --branch v1.0.0-draft.3 \
+git clone --depth 1 \
   https://github.com/a7garden/portable-document-contract.git \
   "${CODEX_HOME:-$HOME/.codex}/skills/portable-document-contract"
 ```
 
 Do not nest the repository one directory deeper: `SKILL.md` must be directly inside the `portable-document-contract` directory.
 
-The command above pins the draft tag. Remove `--branch v1.0.0-draft.3` if you intentionally want a Git-managed installation that follows `main` and can be updated with `git pull`.
+The command above follows `main` and can be updated with `git pull`. Add `--branch <released-tag>` when you intentionally want a fixed release.
 
 ## Use
 
