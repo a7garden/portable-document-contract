@@ -1,20 +1,22 @@
 # Portable Document Contract
 
-Portable Document Contract (PDC) is a neutral interoperability contract for apps that need to read, edit, index, link, and preserve the same user-authored notes without silently losing data. It defines a frozen Djot profile for ordinary notes and a source-preserving HTML profile for documents whose native structure, layout, or inline CSS matters.
+Portable Document Contract (PDC) is a neutral interoperability contract for apps that need to read, edit, index, link, and preserve the same user-authored notes without silently losing data. Version 2 defines an Obsidian-compatible Markdown profile for ordinary notes and a source-preserving HTML profile for documents whose native structure, layout, or inline CSS matters. PDC 1 documents — Djot and HTML — remain mandatory readable legacy inputs and are never automatically converted.
 
 This repository is both the canonical specification and an implicitly invokable Codex skill. Install it once and Codex can apply the contract automatically when a task concerns a durable user-document format.
 
-> Status: `v1.0.0-draft.4` working draft. `pdc-document/1` is the shared contract; `pdc-djot/1` and `pdc-html/1` are canonical body-profile boundaries. Earlier draft tags used the provisional OXI name and were superseded before application adoption.
+> Status: `v2.0.0-draft.1` working draft. `pdc-document/2` is the shared contract; `pdc-markdown/1` and `pdc-html/1` are canonical body profiles; `pdc-query/1` is the optional separately versioned query contract. `pdc-document/1` (`pdc-djot/1`, `pdc-html/1`) remains a frozen legacy contract that conforming apps must read and must never auto-convert. Earlier draft tags used the provisional OXI name and were superseded before application adoption.
 
 ## Contents
 
-- Normative contract: [`references/PDC-1.0.md`](references/PDC-1.0.md)
+- Normative contract: [`references/PDC-2.0.md`](references/PDC-2.0.md)
+- Frozen legacy contract: [`references/PDC-1.0.md`](references/PDC-1.0.md)
+- Query contract: [`references/PDC-QUERY-1.0.md`](references/PDC-QUERY-1.0.md)
 - Adoption and migration guide: [`references/adoption.md`](references/adoption.md)
-- Parsed-envelope schema: [`references/envelope.schema.json`](references/envelope.schema.json)
-- Shared render policy: [`references/render-policy.json`](references/render-policy.json)
+- Parsed-envelope schema: [`references/envelope-2.schema.json`](references/envelope-2.schema.json) (v1 audit copy: [`references/envelope.schema.json`](references/envelope.schema.json))
+- Shared render policy: [`references/render-policy-3.json`](references/render-policy-3.json) (v1 audit copy: [`references/render-policy.json`](references/render-policy.json))
 - Cross-language fixtures: [`conformance/`](conformance/)
 
-The contract governs durable user-authored documents, not repository documentation or every Markdown/HTML file in an app. Its compatibility target is reliable discovery, parsing, identity, core semantics, safe rendering, and lossless preservation across independently branded apps. Djot and marked PDC HTML are equally canonical; ordinary unmarked HTML remains visible legacy input.
+The contract governs durable user-authored documents, not repository documentation or every Markdown/HTML file in an app. Its compatibility target is reliable discovery, parsing, identity, core semantics, safe rendering, and lossless preservation across independently branded apps. Markdown and marked PDC HTML are equally canonical; plain Markdown and ordinary unmarked HTML remain visible legacy input, and PDC 1 Djot and HTML documents remain readable legacy that is never rewritten in place.
 
 ## Install as a Codex skill
 

@@ -1,6 +1,6 @@
 interface:
   display_name: "Portable Document Contract"
-  short_description: "Keep user-authored documents interoperable across apps"
+  short_description: "Keep Markdown and HTML user-authored documents interoperable across apps"
   default_prompt: "Use $portable-document-contract to design or audit this app's user-document format for cross-app compatibility."
 policy:
   allow_implicit_invocation: true
