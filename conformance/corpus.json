@@ -1,6 +1,6 @@
 {
   "format": "pdc-document-conformance/2",
-  "revision": 1,
+  "revision": 2,
   "markdownBaseline": "CommonMark 0.31.2 + GFM 0.29-gfm (tables, strikethrough, task lists, autolinks)",
   "queryContract": "pdc-query/1",
   "bodyProfiles": ["pdc-markdown/1", "pdc-html/1"],

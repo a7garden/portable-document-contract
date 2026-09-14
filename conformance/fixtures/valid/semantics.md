@@ -58,7 +58,7 @@ filters:
   and:
     - tags.contains("standard")
     - not:
-        deleted = true
+        - 'deleted == true'
 formulas:
   score: "priority * 2"
 properties:
@@ -69,9 +69,8 @@ views:
     name: Standard notes
     limit: 50
     order:
-      - property: priority
-        direction: ASC
+      - file.name
+      - note.priority
     summaries:
-      - property: priority
-        functions: [count]
+      note.priority: Average
 ```

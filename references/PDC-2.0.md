@@ -1,6 +1,6 @@
 # Portable Document Contract 2
 
-Status: public draft 1
+Status: public draft 2
 
 Date: 2026-09-14
 

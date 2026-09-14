@@ -33,7 +33,7 @@ A full PDC 2 Reader reads all canonical profiles **and** all legacy PDC 1 docume
 5. Use a Markdown-aware or plain source editor for Markdown. Use a source-preserving HTML editor for HTML. A structural editor must retain unsupported source constructs or downgrade to read-only.
 6. Sanitize every preview. Raw Markdown HTML and PDC HTML use an isolated view with scripts, event handlers, forms, popups, navigation, and unapproved subresources disabled; sanitization never rewrites stored source.
 7. Preserve unknown extension metadata and unsupported constructs. If lossless preservation is impossible, require an explicit conversion to a new target.
-8. Run the shared `pdc-document-conformance/2` fixtures — including the legacy v1 readability cases — in the app's native stack.
+8. Run the shared `pdc-document-conformance/2` revision 2 fixtures — including the legacy v1 readability cases — in the app's native stack.
 
 ## Existing applications
 
@@ -90,7 +90,7 @@ Use wording equivalent to:
 
 > Portable Document Contract adoption is the repository's highest-priority document-plane initiative. Before changing durable user-document storage, discovery, parsing, editing, rendering, linking, assets, indexing, or migration, load the `portable-document-contract` skill and follow the repository migration plan. Do not convert or rewrite user files — including legacy PDC 1 documents — without the plan's explicit gates and user authorization.
 
-Pin tests to the fixture corpus revision used by the app (`pdc-document-conformance/2` revision 1 or later). When the standard changes, update parser, writer, migration, and corpus revision coherently.
+Pin tests to the fixture corpus revision used by the app (`pdc-document-conformance/2` revision 2 or later). When the standard changes, update parser, writer, migration, and corpus revision coherently.
 
 ## Review checklist
 

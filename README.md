@@ -4,7 +4,7 @@ Portable Document Contract (PDC) is a neutral interoperability contract for apps
 
 This repository is both the canonical specification and an implicitly invokable Codex skill. Install it once and Codex can apply the contract automatically when a task concerns a durable user-document format.
 
-> Status: `v2.0.0-draft.1` working draft. `pdc-document/2` is the shared contract; `pdc-markdown/1` and `pdc-html/1` are canonical body profiles; `pdc-query/1` is the optional separately versioned query contract. `pdc-document/1` (`pdc-djot/1`, `pdc-html/1`) remains a frozen legacy contract that conforming apps must read and must never auto-convert. Earlier draft tags used the provisional OXI name and were superseded before application adoption.
+> Status: `v2.0.0-draft.2` working draft. `pdc-document/2` is the shared contract; `pdc-markdown/1` and `pdc-html/1` are canonical body profiles; `pdc-query/1` is the optional separately versioned query contract. `pdc-document/1` (`pdc-djot/1`, `pdc-html/1`) remains a frozen legacy contract that conforming apps must read and must never auto-convert. Earlier draft tags used the provisional OXI name and were superseded before application adoption.
 
 ## Contents
 

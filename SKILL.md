@@ -22,7 +22,7 @@ Before designing or changing a canonical user-document format, read [references/
 - If the standard does not define a needed semantic, use a namespaced user property or extension with a readable fallback and preserve it in every other app. Do not silently invent new unprefixed contract fields or `pdc-*` syntax.
 - An app that cannot preserve a construct must keep the document read-only or report a conversion conflict. It must never silently omit, hide, or destructively rewrite an in-scope document.
 - New apps write only canonical PDC 2 profiles. Existing apps migrate with dual-read (v1 and v2) and canonical-write-for-new-documents. Bulk conversion requires explicit user authorization, backup, and a per-document loss report.
-- Add the shared conformance fixtures (`pdc-document-conformance/2`, including legacy readability cases) to each implementation's tests. A parser library version or successful render alone is not evidence of conformance.
+- Add the shared conformance fixtures (`pdc-document-conformance/2`, revision 2, including legacy readability cases) to each implementation's tests. A parser library version or successful render alone is not evidence of conformance.
 - Propose changes in the canonical standard repository first. A breaking syntax or semantic change requires a new major identifier and a migration path.
 
 This skill guides format and implementation decisions; it does not itself authorize editing app repositories, converting user files, publishing, or deleting legacy data.
